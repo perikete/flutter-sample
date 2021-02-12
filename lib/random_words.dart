@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'favourite_random.dart';
+import 'random_list.dart';
 
 class RandomWords extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class RandomWords extends StatefulWidget {
 
 class _RandomWordsState extends State<RandomWords> {
   WordPair _random;
+  final List<String> _favourites = ["test"];
 
   @override
   void initState() {
@@ -21,16 +24,32 @@ class _RandomWordsState extends State<RandomWords> {
     });
   }
 
+  void _handleOnFavouriteRandom() {
+    setState(() {
+      _favourites.add(_random.asPascalCase);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Random word:',
-          ),
-          Text(_random.asPascalCase),
-          ElevatedButton(onPressed: _handleNewRandom, child: Text("New Random"))
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(
+              'Random word:',
+            ),
+            Text(_random.asPascalCase),
+            FavouriteRandom(
+              onPressed: _handleOnFavouriteRandom,
+            )
+          ]),
+          ElevatedButton(
+              onPressed: _handleNewRandom, child: Text("New Random")),
+          RandomsList(
+            randomsList: _favourites,
+          )
         ]);
   }
 }
